@@ -42,7 +42,9 @@ Node<K, V>::Node(K key, V value, int node_level): _key(key), _value(value), _nod
 }
 
 template<typename K, typename V>
-Node<K, V>::~Node() = default;
+Node<K, V>::~Node() {
+
+}
 
 template<typename K, typename V>
 inline K Node<K, V>::get_key() {

@@ -65,7 +65,7 @@ void test_find(Skiplist<int, string> &test) {
 
 
 int main() {
-    Skiplist<int, string> test(5);
+    Skiplist<int, string> test(10);
     test_insert(test);
     test.display();
 

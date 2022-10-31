@@ -49,13 +49,13 @@ public:
 public:
     // debug only
     void display() const;
-    
+
 public:
     // deleted methods.
-    
+
     Skiplist(const Skiplist& rhs) = delete;
     Skiplist(const Skiplist&& rhs) = delete;
-    
+
     Skiplist& operator = (const Skiplist& rhs) = delete;
     Skiplist& operator = (const Skiplist&& rhs) = delete;
 
@@ -104,12 +104,6 @@ Skiplist<K, V>::~Skiplist() {
     if (_fin.is_open()) {
         _fin.close();
     }
-    std::cout << "here" << std::endl;
-
-    delete _head;
-    _head = nullptr;
-
-    std::cout << "here" << std::endl;
 }
 
 template<class K, class V>
@@ -118,7 +112,7 @@ int Skiplist<K, V>::insert(K key, V value) {
     mtx.lock();
 
     auto cur = _head;
-    std::vector<Node<K, V>* > update(_max_level);
+    std::vector<Node<K, V>* > update(_max_level, 0);
 
     // find the place to be inserted
     for (int i = _level - 1; i >= 0;  i --) {
@@ -139,13 +133,13 @@ int Skiplist<K, V>::insert(K key, V value) {
         auto node = new Node<K, V>(key, value, rand_level);
 
         if (rand_level > _level) {
-            for(int i = _level; i < _max_level; i ++) {
+            for(int i = _level; i < rand_level; i ++) {
                 update[i] = _head;
             }
             _level = rand_level;
         }
 
-        for(int i = 0; i < _level; i ++) {
+        for(int i = 0; i < rand_level; i ++) {
             node->forward[i] = update[i]->forward[i];
             update[i]->forward[i] = node;
         }
@@ -160,7 +154,7 @@ int Skiplist<K, V>::insert(K key, V value) {
     mtx.unlock();
 
     return return_val;
-    
+
 }
 
 template<class K, class V>
@@ -264,7 +258,6 @@ void Skiplist<K, V>::clear() {
         delete cur;
         cur = tmp;
     }
-    cur = nullptr;
 
     mtx.unlock();
 }
