@@ -104,6 +104,9 @@ Skiplist<K, V>::~Skiplist() {
     if (_fin.is_open()) {
         _fin.close();
     }
+
+    delete _head;
+    _head = nullptr;
 }
 
 template<class K, class V>
@@ -206,6 +209,8 @@ template<class K, class V>
 int Skiplist<K, V>::erase(K key) {
     if (_size == 0) return -1;
 
+    mtx.lock();
+
     auto cur = _head;
     Node<K, V> *update[_max_level];
 
@@ -243,6 +248,8 @@ int Skiplist<K, V>::erase(K key) {
         return_val = key;
     }
 
+    mtx.unlock();
+
     return return_val;
 }
 
@@ -253,10 +260,15 @@ void Skiplist<K, V>::clear() {
     mtx.lock();
 
     auto cur = _head;
+    cur = _head->forward[0];
     while(cur) {
-        auto tmp = cur->forward[0];
+        auto next = cur->forward[0];
         delete cur;
-        cur = tmp;
+        cur = next;
+    }
+
+    for(auto &i: _head->forward) {
+        i = nullptr;
     }
 
     mtx.unlock();

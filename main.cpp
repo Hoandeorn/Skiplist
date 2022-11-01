@@ -69,15 +69,15 @@ int main() {
     test_insert(test);
     test.display();
 
-//    test_erase(test);
-//
-//    test_find(test);
-//
-//    cout << "size of skiplist: " << test.size() << endl;
-//    cout << "is empty: " << test.empty() << endl;
-//
-//    test.clear();
-//
-//    cout << test.empty() << endl;
+    test_erase(test);
+
+    test_find(test);
+
+    cout << "size of skiplist: " << test.size() << endl;
+    cout << "is empty: " << test.empty() << endl;
+
+    test.clear();
+
+    cout << test.empty() << endl;
 
 }
